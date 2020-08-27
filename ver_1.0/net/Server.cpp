@@ -13,7 +13,7 @@ Server::Server(EventLoop* loop,int threadNum,int port)
     port_(port),
     started_(false),
     acceptChannel_(new Channel(loop)),
-    eventLoopThreadPool_(new EventLoopThreadPool(loop,threadNum)),//单线程模式
+    eventLoopThreadPool_(new EventLoopThreadPool(loop,threadNum)),
     listenFd_(socket_bind_listen(port))
 {
     acceptChannel_->setFd(listenFd_);
@@ -26,8 +26,7 @@ Server::Server(EventLoop* loop,int threadNum,int port)
 
 void Server::start()
 {
-    std::cout << "start" << std::endl;
-    eventLoopThreadPool_->start();//单线程模式
+    eventLoopThreadPool_->start();
     acceptChannel_->setEvents(EPOLLIN | EPOLLET);
     acceptChannel_->setReadHandler(std::bind(&Server::handleNewConn,this));
     acceptChannel_->setConnHandler(std::bind(&Server::handleThisConn,this));
@@ -43,7 +42,7 @@ void Server::handleNewConn()
     int acceptFd=0;
     while((acceptFd=accept(listenFd_,(struct sockaddr*)&client_addr,&client_addr_len))>0)
     {//non blocking 写法
-        //EventLoop* loop=loop_;//单线程调试
+        //EventLoop* loop=loop_;
         EventLoop* loop=eventLoopThreadPool_->getNextLoop();
         if(acceptFd>=MAXFDS)
         {

@@ -6,12 +6,10 @@
 #include"Channel.h"
 #include"EventLoop.h"
 #include"Util.h"
-const __uint32_t DEFAULT_EVENT = EPOLLIN | EPOLLET;
-//const __uint32_t DEFAULT_EVENT = EPOLLIN | EPOLLET | EPOLLONESHOT;
+const __uint32_t DEFAULT_EVENT = EPOLLIN | EPOLLET | EPOLLONESHOT;
 
 Data::Data(EventLoop* loop, int connfd):loop_(loop),
-    channel_(new Channel(loop, connfd)),fd_(connfd), 
-    error_(false)
+    channel_(new Channel(loop, connfd)),fd_(connfd), error_(false)
 {
     channel_->setReadHandler(std::bind(&Data::handleRead,this));
     channel_->setWriteHandler(std::bind(&Data::handleWrite,this));
@@ -20,7 +18,6 @@ Data::Data(EventLoop* loop, int connfd):loop_(loop),
 void Data::newEvent()
 {
     channel_->setEvents(EPOLLIN | EPOLLET);
-    channel_->setTimeout();
     loop_->addToPoller(channel_);
 }
 void Data::handleRead()
@@ -45,8 +42,5 @@ void Data::handleWrite()
         std::cout << "Data write error" <<std::endl;
     }
     if(outBuffer_.size() > 0 )
-    {
         events_ |= EPOLLOUT;
-    }
-    
 }

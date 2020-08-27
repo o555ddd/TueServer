@@ -70,7 +70,7 @@ ssize_t writen(int fd, void* buff, size_t n)
     size_t writeSum=0;
     char* ptr=(char*) buff;
     while(nleft>0){
-        if((nwritten=write(fd,ptr,nleft))<=0)
+        if((nwritten=write(fd,ptr,nleft))<0)
         {
             if(errno == EINTR)
                 continue;
@@ -79,6 +79,8 @@ ssize_t writen(int fd, void* buff, size_t n)
             else
                 return -1;
         }
+        else if(nwritten==0)
+                break;
         writeSum+=nwritten;
         nleft-=nwritten;
         ptr+=nwritten;
@@ -94,7 +96,7 @@ ssize_t writen(int fd, std::string &sbuff)
     const char* ptr = sbuff.c_str();
     while(nleft > 0)
     {
-        if((nwritten= write(fd, ptr, nleft))<=0)
+        if((nwritten= write(fd, ptr, nleft))<0)
         {
             if(errno == EINTR)
             {
@@ -106,6 +108,8 @@ ssize_t writen(int fd, std::string &sbuff)
             else
                 return -1;
         }
+        else if(nwritten==0)
+            break;
         std::cout << "write " << nwritten << std::endl;
         writeSum += nwritten;
         nleft -= nwritten;

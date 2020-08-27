@@ -29,9 +29,6 @@
         "vector": "cpp",
         "fstream": "cpp",
         "sstream": "cpp",
-        "deque": "cpp",
-        "unordered_set": "cpp",
-        "string": "cpp",
-        "queue": "cpp"
+        "deque": "cpp"
     }
 }

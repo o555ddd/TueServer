@@ -18,7 +18,7 @@ int createEventFd()
 }
 
 EventLoop::EventLoop()
-    :looping_(false),poller_(new Epoll(this)),wakeupFd_(createEventFd()),
+    :looping_(false),poller_(new Epoll()),wakeupFd_(createEventFd()),
     quit_(false),eventHandling_(false),callingPendingFunctors_(false),
     threadId_(CurrentThread::tid()),pwakeupChannel_(new Channel(this,wakeupFd_))
 {

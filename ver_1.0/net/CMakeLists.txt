@@ -5,7 +5,6 @@ set(LIB_SRC
     EventLoop.cpp
     EventLoopThread.cpp
     EventLoopThreadPool.cpp
-    IdleTimer.cpp
     Server.cpp
     Util.cpp
 )

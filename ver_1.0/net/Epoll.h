@@ -5,10 +5,10 @@
 #include<vector>
 #include"Channel.h"
 #include"Data.h"
-#include"IdleTimer.h"
+
 class Epoll{
     public:
-        Epoll(EventLoop* loop);
+        Epoll();
         ~Epoll(){};
         void epollAdd(SP_Channel request);
         void epollMod(SP_Channel request);
@@ -19,9 +19,7 @@ class Epoll{
         private:
             static const int MAXFDS = 100000;
             int epollFd_;
-            EventLoop* loop_;
             std::vector<epoll_event> events_;
             SP_Channel fd2chan_[MAXFDS];
             std::shared_ptr<Data> fd2data_[MAXFDS];
-            IdleTimer timer_;
 };

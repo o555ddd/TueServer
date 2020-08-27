@@ -15,24 +15,19 @@
 const int EVENTSNUM = 4096;
 const int EPOLLWAIT_TIME = 10000;
 
-Epoll::Epoll(EventLoop* loop):epollFd_(epoll_create1(EPOLL_CLOEXEC)),loop_(loop),
-events_(EVENTSNUM),timer_(loop,this)
+Epoll::Epoll(): epollFd_(epoll_create1(EPOLL_CLOEXEC)),events_(EVENTSNUM)
 {
     assert(epollFd_>0);
 }
 
-void Epoll::epollAdd(SP_Channel request)//0则永远停留
+void Epoll::epollAdd(SP_Channel request)
 {
     int fd = request->getFd();
-    if(request->isTimeout())
-    {
-        timer_.addExpire(request);
-        fd2data_[fd] = request->getHolder();
-    }
-    fd2chan_[fd]=request;
     struct epoll_event event;
     event.data.fd = fd;
     event.events = request->getEvents();
+    fd2chan_[fd]=request;
+    fd2data_[fd] = request->getHolder();
     if(epoll_ctl(epollFd_, EPOLL_CTL_ADD, fd, &event) < 0)
     {
         perror("epollAdd error");
@@ -89,8 +84,6 @@ std::vector<SP_Channel> Epoll::getEventsRequest(int events_num)
             cur_req->setRevents(events_[i].events);
             cur_req->setEvents(0);
             req_data.push_back(cur_req);
-            if(cur_req->isTimeout())
-                timer_.refresh(cur_req);
         }
     }
 

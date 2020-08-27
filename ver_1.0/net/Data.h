@@ -18,7 +18,6 @@ class Data : public std::enable_shared_from_this<Data>//安全地生成其他额
             close(fd_);
             }
         void newEvent();
-        int getFd(){return fd_;}
         std::shared_ptr<Channel> getChannel(){return channel_;}
     private:
         EventLoop* loop_;

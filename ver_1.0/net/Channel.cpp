@@ -40,3 +40,4 @@ void Channel::handleEvents()
         handleWrite();
     handleConn();
 }
+

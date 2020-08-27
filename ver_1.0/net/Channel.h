@@ -4,9 +4,9 @@
 #include<memory>
 #include<string>
 #include<unordered_map>
-class Data;
+
 class EventLoop;
-class TimeNode;
+class Data;
 class Channel{
     private:
         typedef std::function<void()> CallBack;
@@ -19,11 +19,9 @@ class Channel{
         CallBack writeHandler_;
         CallBack errorHandler_;
         CallBack connHandler_;
-        bool timeout_;
-        std::weak_ptr<TimeNode> timeNode_;
+
     public:
-        Channel(EventLoop* loop, int fd=0):loop_(loop),fd_(fd),events_(0),
-        timeout_(false){};
+        Channel(EventLoop* loop, int fd=0):loop_(loop),fd_(fd),events_(0){};
         
         void handleRead();
         void handleWrite();
@@ -32,7 +30,7 @@ class Channel{
         void setHolder(std::shared_ptr<Data> holder){holder_=holder;}
         std::shared_ptr<Data> getHolder()
         {
-            std::shared_ptr<Data> ret(holder_.lock());//holder_.lock()提升为shared_ptr
+            std::shared_ptr<Data> ret(holder_.lock());
             return ret;
         }
 
@@ -47,10 +45,6 @@ class Channel{
         void handleEvents();
         int getFd(){return fd_;}
         void setFd(int fd){fd_=fd;};
-        void setTimeout(){timeout_=true;}
-        void setTimeNode(std::shared_ptr<TimeNode> timeNode){timeNode_=timeNode;}
-        std::weak_ptr<TimeNode> getTimeNode(){return timeNode_;}
-        bool isTimeout(){return timeout_;}
 };
 
 typedef std::shared_ptr<Channel> SP_Channel;
