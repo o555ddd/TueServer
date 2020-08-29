@@ -32,7 +32,6 @@
         "deque": "cpp",
         "unordered_set": "cpp",
         "string": "cpp",
-        "queue": "cpp",
-        "random": "cpp"
+        "queue": "cpp"
     }
 }

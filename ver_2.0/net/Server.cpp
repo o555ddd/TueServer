@@ -26,6 +26,7 @@ Server::Server(EventLoop* loop,int threadNum,int port)
 
 void Server::start()
 {
+    std::cout << "start" << std::endl;
     eventLoopThreadPool_->start();//单线程模式
     acceptChannel_->setEvents(EPOLLIN | EPOLLET);
     acceptChannel_->setReadHandler(std::bind(&Server::handleNewConn,this));

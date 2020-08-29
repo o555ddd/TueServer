@@ -3,7 +3,7 @@
 #include<sys/eventfd.h>
 #include<iostream>
 #include"Util.h"
-#include"base/Logging.h"
+
 __thread EventLoop* t_loopInThisThread = 0;
 
 int createEventFd()
@@ -84,7 +84,7 @@ void EventLoop::loop()
     std::vector<SP_Channel> ret;
     while(!quit_)
     {
-        LOG << "thread " << threadId_;
+        std::cout << "thread " << threadId_ << std::endl;
         ret.clear();
         ret=poller_->poll();
         eventHandling_=true;
