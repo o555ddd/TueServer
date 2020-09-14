@@ -1,6 +1,6 @@
 C++ high performance server 这是我学习了陈硕的muduo服务器后自己动手做的c++高性能服务器，实现了epoll + “one loop per thread”的模型。代码借鉴了https://github.com/linyacool/WebServer 。
 
-ver 1.0实现了epoll + “one loop per thread”的模型。实现了简单的echo功能，可以与客户端建立tcp连接，接收客户端数据并返回给客户端。
+ver 1.0实现了epoll + “one loop per thread”的模型。实现了echo协议，可以与客户端建立tcp连接，接收客户端数据并返回给客户端。服务器以事件回调的方式处理读写。
 
 ver 2.0实现了定时踢走空闲连接功能，用于踢走长期空闲连接和未妥善关闭的半断开连接。linyacool的实现方法是用小顶堆保存连接时间戳，在每次poller响应事件的周期里处理过时时间戳。小顶堆的写复杂度是O(logn)，并且不会排重；当事件频繁发生时，会频繁地启动过期检查。
 
